@@ -1,0 +1,16 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+
+  .pagination {
+    align-self: center;
+    margin-top: 8px;
+  }
+}
+
+.message {
+  padding: 24px;
+  text-align: center;
+}

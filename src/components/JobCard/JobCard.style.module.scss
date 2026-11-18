@@ -1,0 +1,29 @@
+.card {
+  padding: 24px;
+  border-radius: 12px;
+  background-color: #fff;
+  overflow-wrap: anywhere;
+
+  h2 {
+    margin: 0 0 12px;
+    color: #4263eb;
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  .info {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .muted {
+    color: #868e96;
+    font-size: 14px;
+  }
+
+  p {
+    margin: 12px 0;
+  }
+}

@@ -1,0 +1,17 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background-color: #f6f6f7;
+  color: #0f0f10;
+  font-family: "Open Sans", sans-serif;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
