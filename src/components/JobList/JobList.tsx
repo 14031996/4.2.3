@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Loader, Pagination } from "@mantine/core";
+import { useSearchParams } from "react-router-dom";
 import { useTypedDispatch, useTypedSelector } from "../../hooks/redux";
 import { fetchJobs } from "../../store/thunks/JobsThunks";
 import { setPage } from "../../store/reducers/JobsSlice";
@@ -8,13 +9,22 @@ import Style from "./JobList.style.module.scss";
 
 export const JobList = () => {
   const dispatch = useTypedDispatch();
+  const [searchParams] = useSearchParams();
 
-  const { jobs, isLoading, error, search, city, skills, page, totalPages } =
-    useTypedSelector((state) => state.jobs);
+  const search = searchParams.get("search") ?? "";
+  const city = searchParams.get("city") ?? "";
+  const skillsParam =
+    searchParams.get("skills") ?? "JavaScript,React,Redux,Python";
+
+  const { jobs, isLoading, error, page, totalPages } = useTypedSelector(
+    (state) => state.jobs,
+  );
 
   useEffect(() => {
+    const skills = skillsParam.split(",").filter(Boolean);
+
     dispatch(fetchJobs({ search, city, skills, page }));
-  }, [dispatch, search, city, skills, page]);
+  }, [dispatch, search, city, skillsParam, page]);
 
   const handleChangePage = (value: number) => {
     dispatch(setPage(value));

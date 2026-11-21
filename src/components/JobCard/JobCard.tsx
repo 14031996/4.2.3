@@ -1,4 +1,5 @@
 import { Badge, Button } from "@mantine/core";
+import { Link } from "react-router-dom";
 import type { Job } from "../../types/Job";
 import Style from "./JobCard.style.module.scss";
 
@@ -40,7 +41,12 @@ export const JobCard = ({ job }: JobCardProps) => {
 
       <p>{job.city}</p>
 
-      <Button color="dark" size="sm">
+      <Button
+        component={Link}
+        to={`/vacancies/${job.id}`}
+        color="dark"
+        size="sm"
+      >
         Смотреть вакансию
       </Button>
     </article>

@@ -1,23 +1,24 @@
 import { useState } from "react";
 import { Button, TextInput } from "@mantine/core";
+import { useSearchParams } from "react-router-dom";
 import { useTypedDispatch } from "../../hooks/redux";
-import { setSearch } from "../../store/reducers/JobsSlice";
+import { setPage } from "../../store/reducers/JobsSlice";
 import Style from "./Search.style.module.scss";
 
-export const Search = () => {
-  const [value, setValue] = useState("");
-  const dispatch = useTypedDispatch();
+type SearchFormProps = {
+  search: string;
+  onSearch: (value: string) => void;
+};
 
-  const handleSearch = () => {
-    dispatch(setSearch(value.trim()));
-  };
+const SearchForm = ({ search, onSearch }: SearchFormProps) => {
+  const [value, setValue] = useState(search);
 
   return (
     <form
       className={Style.search}
       onSubmit={(event) => {
         event.preventDefault();
-        handleSearch();
+        onSearch(value.trim());
       }}
     >
       <TextInput
@@ -31,4 +32,25 @@ export const Search = () => {
       <Button type="submit">Найти</Button>
     </form>
   );
+};
+
+export const Search = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const dispatch = useTypedDispatch();
+  const search = searchParams.get("search") ?? "";
+
+  const handleSearch = (value: string) => {
+    const nextParams = new URLSearchParams(searchParams);
+
+    if (value) {
+      nextParams.set("search", value);
+    } else {
+      nextParams.delete("search");
+    }
+
+    dispatch(setPage(1));
+    setSearchParams(nextParams);
+  };
+
+  return <SearchForm key={search} search={search} onSearch={handleSearch} />;
 };

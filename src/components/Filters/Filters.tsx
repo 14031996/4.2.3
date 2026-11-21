@@ -1,25 +1,56 @@
 import { useState } from "react";
 import { ActionIcon, Pill, Select, TextInput } from "@mantine/core";
-import { useTypedDispatch, useTypedSelector } from "../../hooks/redux";
-import { addSkill, removeSkill, setCity } from "../../store/reducers/JobsSlice";
+import { useSearchParams } from "react-router-dom";
+import { useTypedDispatch } from "../../hooks/redux";
+import { setPage } from "../../store/reducers/JobsSlice";
 import Style from "./Filters.style.module.scss";
+
+const defaultSkills = "JavaScript,React,Redux,Python";
 
 export const Filters = () => {
   const [skill, setSkill] = useState("");
-  const { skills, city } = useTypedSelector((state) => state.jobs);
+  const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useTypedDispatch();
 
+  const city = searchParams.get("city") ?? "";
+  const skills = (searchParams.get("skills") ?? defaultSkills)
+    .split(",")
+    .filter(Boolean);
+
+  const handleChangeSkills = (nextSkills: string[]) => {
+    const nextParams = new URLSearchParams(searchParams);
+
+    nextParams.set("skills", nextSkills.join(","));
+    dispatch(setPage(1));
+    setSearchParams(nextParams);
+  };
+
   const handleAddSkill = () => {
-    dispatch(addSkill(skill));
+    const value = skill.trim();
+
+    if (!value || value.includes(",") || skills.includes(value)) {
+      return;
+    }
+
+    handleChangeSkills([...skills, value]);
     setSkill("");
   };
 
   const handleRemoveSkill = (value: string) => {
-    dispatch(removeSkill(value));
+    handleChangeSkills(skills.filter((item) => item !== value));
   };
 
   const handleChangeCity = (value: string | null) => {
-    dispatch(setCity(value || ""));
+    const nextParams = new URLSearchParams(searchParams);
+
+    if (value) {
+      nextParams.set("city", value);
+    } else {
+      nextParams.delete("city");
+    }
+
+    dispatch(setPage(1));
+    setSearchParams(nextParams);
   };
 
   return (

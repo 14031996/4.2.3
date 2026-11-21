@@ -10,6 +10,7 @@ import "@fontsource/open-sans/700.css";
 import "./index.css";
 import App from "./App";
 import { store } from "./store/store";
+import { BrowserRouter } from "react-router-dom";
 
 const theme = createTheme({
   primaryColor: "indigo",
@@ -21,7 +22,9 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Provider store={store}>
       <MantineProvider theme={theme}>
-        <App />
+        <BrowserRouter basename={import.meta.env.BASE_URL}>
+          <App />
+        </BrowserRouter>
       </MantineProvider>
     </Provider>
   </StrictMode>,
